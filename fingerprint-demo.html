@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Fingerprint Demo</title>
+  <script src="https://cdn.jsdelivr.net/npm/@fingerprintjs/fingerprintjs@3/dist/fp.min.js"></script>
+  <style>
+    body {
+      font-family: sans-serif;
+      padding: 2em;
+      background: #f9f9f9;
+    }
+    pre {
+      background: #eee;
+      padding: 1em;
+      border-radius: 5px;
+      max-width: 600px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎯 FingerprintJS Demo</h1>
+  <p>Twój unikalny identyfikator przeglądarki:</p>
+  <pre id="fingerprint">Generuję...</pre>
+  <div id="status"></div>
+
+  <script>
+    // Inicjalizacja biblioteki
+    FingerprintJS.load().then(fp => {
+      fp.get().then(result => {
+        const visitorId = result.visitorId;
+        const stored = localStorage.getItem("fp");
+
+        // Wyświetl fingerprint
+        document.getElementById("fingerprint").textContent = visitorId;
+
+        // Czy użytkownik już tu był?
+        if (stored === visitorId) {
+          document.getElementById("status").textContent = "👋 Witaj ponownie! Rozpoznaliśmy Cię.";
+        } else {
+          localStorage.setItem("fp", visitorId);
+          document.getElementById("status").textContent = "🆕 Wygląda na to, że jesteś tu pierwszy raz.";
+        }
+      });
+    });
+  </script>
+</body>
+</html>
